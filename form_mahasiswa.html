@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Data Mahasiswa</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 32px 16px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #fdf2f8, #eef6ff);
+            color: #26334a;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 30px;
+            background: #ffffff;
+            border: 1px solid #f0e4f4;
+            border-radius: 18px;
+            box-shadow: 0 12px 32px rgba(93, 75, 130, 0.12);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 26px;
+        }
+
+        .header .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+            background: #fce7f3;
+            color: #a21caf;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: #4338ca;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: #718096;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1.5px solid #d8d9e8;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #26334a;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s, background-color 0.25s;
+        }
+
+        input::placeholder {
+            color: #a0a6b8;
+        }
+
+        input:focus, select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.45);
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 6px;
+            color: #dc2626;
+            font-size: 12px;
+        }
+
+        .save-button {
+            width: 100%;
+            padding: 13px 16px;
+            margin-top: 4px;
+            border: none;
+            border-radius: 10px;
+            background: #6d5bd0;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(109, 91, 208, 0.2);
+            transition: background-color 0.25s, transform 0.25s, box-shadow 0.25s;
+        }
+
+        .save-button:hover {
+            background: #007bff;
+            transform: scale(1.02);
+            box-shadow: 0 7px 16px rgba(0, 123, 255, 0.25);
+        }
+
+        .save-button:active {
+            transform: scale(0.99);
+        }
+
+        .note {
+            margin: 18px 0 0;
+            text-align: center;
+            color: #8a91a5;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 18px 12px;
+            }
+            .container {
+                padding: 22px 18px;
+            }
+            h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div class="header">
+            <span class="tag">FORM MAHASISWA</span>
+            <h1>Tambah Data Mahasiswa</h1>
+            <p class="subtitle">Silakan isi data mahasiswa dengan lengkap sebelum menyimpan.</p>
+        </div>
+
+        <form id="formMahasiswa" novalidate>
+            <div class="form-group">
+                <label for="nim">NIM</label>
+                <input type="text" id="nim" placeholder="Masukkan NIM">
+                <small id="errorNim" class="error-message">NIM harus diisi!</small>
+            </div>
+
+            <div class="form-group">
+                <label for="nama">Nama Lengkap</label>
+                <input type="text" id="nama" placeholder="Masukkan nama lengkap">
+                <small id="errorNama" class="error-message">Nama harus diisi!</small>
+            </div>
+
+            <div class="form-group">
+                <label for="matkul">Mata Kuliah</label>
+                <select id="matkul">
+                    <option value="">-- Pilih Mata Kuliah --</option>
+                    <option value="Pemrograman Web">Pemrograman Web</option>
+                    <option value="Basis Data">Basis Data</option>
+                    <option value="Desain UI/UX">Desain UI/UX</option>
+                </select>
+                <small id="errorMatkul" class="error-message">Mata kuliah harus dipilih!</small>
+            </div>
+
+            <button type="submit" id="btnSimpan" class="save-button">Simpan Data</button>
+        </form>
+
+        <p class="note">Pastikan semua data sudah benar sebelum disimpan.</p>
+    </main>
+
+    <script>
+        const tombol = document.getElementById("btnSimpan");
+        const inputNim = document.getElementById("nim");
+        const inputNama = document.getElementById("nama");
+        const selectMatkul = document.getElementById("matkul");
+        const form = document.getElementById("formMahasiswa");
+
+        const errorNim = document.getElementById("errorNim");
+        const errorNama = document.getElementById("errorNama");
+        const errorMatkul = document.getElementById("errorMatkul");
+
+        const inputs = [inputNim, inputNama, selectMatkul];
+        const borderNormal = "#d8d9e8";
+        let formSudahDiperiksa = false;
+
+        // 1. Hover tombol: warna berubah biru dan tombol sedikit membesar.
+        tombol.addEventListener("mouseover", function() {
+            tombol.style.backgroundColor = "#007bff";
+            tombol.style.transform = "scale(1.02)";
+        });
+
+        tombol.addEventListener("mouseout", function() {
+            tombol.style.backgroundColor = "#6d5bd0";
+            tombol.style.transform = "scale(1)";
+        });
+
+        // 2. Focus input: border biru dan efek glow kuning.
+        inputs.forEach(function(element) {
+            element.addEventListener("focus", function() {
+                element.style.borderColor = "#007bff";
+                element.style.boxShadow = "0 0 0 3px rgba(250, 204, 21, 0.45)";
+            });
+
+            element.addEventListener("blur", function() {
+                element.style.boxShadow = "none";
+                if (formSudahDiperiksa) {
+                    periksaSatuInput(element);
+                } else {
+                    element.style.borderColor = borderNormal;
+                }
+            });
+        });
+
+        // 6. Mengisi nama: background berubah menjadi biru muda.
+        inputNama.addEventListener("input", function() {
+            inputNama.style.backgroundColor =
+                inputNama.value.trim() !== "" ? "#e0f2fe" : "#ffffff";
+            if (formSudahDiperiksa) periksaSatuInput(inputNama);
+        });
+
+        // 7. Memilih mata kuliah: background berubah menjadi hijau muda.
+        selectMatkul.addEventListener("change", function() {
+            selectMatkul.style.backgroundColor =
+                selectMatkul.value !== "" ? "#dcfce7" : "#ffffff";
+            if (formSudahDiperiksa) periksaSatuInput(selectMatkul);
+        });
+
+        inputNim.addEventListener("input", function() {
+            if (formSudahDiperiksa) periksaSatuInput(inputNim);
+        });
+
+        function periksaSatuInput(element) {
+            let valid = element === selectMatkul
+                ? element.value !== ""
+                : element.value.trim() !== "";
+
+            element.style.borderColor = valid ? "#16a34a" : "#dc2626";
+
+            if (element === inputNim) {
+                errorNim.style.display = valid ? "none" : "block";
+            } else if (element === inputNama) {
+                errorNama.style.display = valid ? "none" : "block";
+            } else if (element === selectMatkul) {
+                errorMatkul.style.display = valid ? "none" : "block";
+            }
+            return valid;
+        }
+
+        // 3 & 4. Validasi form dan border merah/hijau.
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+            formSudahDiperiksa = true;
+
+            const nimValid = periksaSatuInput(inputNim);
+            const namaValid = periksaSatuInput(inputNama);
+            const matkulValid = periksaSatuInput(selectMatkul);
+
+            if (nimValid && namaValid && matkulValid) {
+                // 5. Alert/output: menampilkan data mahasiswa.
+                const nim = inputNim.value.trim();
+                const nama = inputNama.value.trim();
+                const matkul = selectMatkul.value;
+
+                alert(
+                    "Data Mahasiswa Berhasil Disimpan!\n\n" +
+                    "NIM: " + nim + "\n" +
+                    "Nama: " + nama + "\n" +
+                    "Mata Kuliah: " + matkul
+                );
+
+                // 8. Reset form setelah data berhasil disimpan.
+                form.reset();
+                formSudahDiperiksa = false;
+
+                inputs.forEach(function(element) {
+                    element.style.borderColor = borderNormal;
+                    element.style.boxShadow = "none";
+                    element.style.backgroundColor = "#ffffff";
+                });
+
+                errorNim.style.display = "none";
+                errorNama.style.display = "none";
+                errorMatkul.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
